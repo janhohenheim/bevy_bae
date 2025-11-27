@@ -3,7 +3,6 @@
 use bevy::{log::LogPlugin, prelude::*, time::TimeUpdateStrategy};
 use bevy_bae::prelude::*;
 use bevy_ecs::entity_disabling::Disabled;
-use bevy_mod_props::PropsMutExt;
 use std::sync::Mutex;
 
 #[test]
@@ -293,12 +292,12 @@ fn compound_effects_are_applied() {
     app.update();
     app.assert_last_opt("a");
 
-    assert!(!*app.behavior_entity().get_prop::<bool>("called"));
+    assert!(!app.behavior_entity().get_prop::<bool>("called"));
 
     app.update();
     app.assert_last_opt("b");
 
-    assert!(*app.behavior_entity().get_prop::<bool>("called"));
+    assert!(app.behavior_entity().get_prop::<bool>("called"));
 
     app.update();
     app.assert_last_opt("a");
@@ -321,14 +320,14 @@ fn nested_compound_effects_are_applied() {
     app.update();
     app.assert_last_opt("a");
 
-    assert!(!*app.behavior_entity().get_prop::<bool>("called_outer"));
-    assert!(!*app.behavior_entity().get_prop::<bool>("called_inner"));
+    assert!(!app.behavior_entity().get_prop::<bool>("called_outer"));
+    assert!(!app.behavior_entity().get_prop::<bool>("called_inner"));
 
     app.update();
     app.assert_last_opt("b");
 
-    assert!(*app.behavior_entity().get_prop::<bool>("called_outer"));
-    assert!(*app.behavior_entity().get_prop::<bool>("called_inner"));
+    assert!(app.behavior_entity().get_prop::<bool>("called_outer"));
+    assert!(app.behavior_entity().get_prop::<bool>("called_inner"));
 
     app.update();
     app.assert_last_opt("a");
@@ -350,16 +349,16 @@ fn compound_effects_are_not_applied_on_abort() {
     app.update();
     app.assert_last_opt("a");
 
-    assert!(!*app.behavior_entity().get_prop::<bool>("called"));
+    assert!(!app.behavior_entity().get_prop::<bool>("called"));
 
     app.behavior_entity().set_prop("disabled", true);
     app.update();
     app.assert_last_opt(None);
-    assert!(!*app.behavior_entity().get_prop::<bool>("called"));
+    assert!(!app.behavior_entity().get_prop::<bool>("called"));
 
     app.update();
     app.assert_last_opt("c");
-    assert!(!*app.behavior_entity().get_prop::<bool>("called"));
+    assert!(!app.behavior_entity().get_prop::<bool>("called"));
 }
 
 #[test]

@@ -983,8 +983,9 @@ checksum = "7ef8e4b7e61dfe7719bb03c884dc270cd46a82efb40f93e9933b990c5c190c59"
 
 [[package]]
 name = "bevy_mod_props"
-version = "0.1.0"
-source = "git+https://github.com/NthTensor/trill#1d52e816d8f46ec26afc2a453a9b4d587dc0535d"
+version = "1.0.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "c1f6149e7bad6a8515b4496f157093dbbc076082867caf8af1013e7c7f900f8a"
 dependencies = [
  "bevy_ecs",
  "thiserror 2.0.17",
