@@ -158,7 +158,7 @@ fn idle(In(_input): In<OperatorInput>) -> OperatorStatus {
 
 A `Sequence` will use all valid subtasks and execute them in order. In this case, it will call `greet` once, then advance the plan, and finally stay forever in `idle`.
 
-What does *valid* mean here? BAE uses [`bevy_mod_props`](https://github.com/NthTensor/trill/tree/main/crates/bevy_mod_props), which attaches arbitrary key-value properties to entities.
+What does *valid* mean here? BAE uses [`bevy_mod_props`](https://github.com/NthTensor/bevy_mod_props), which attaches arbitrary key-value properties to entities.
 BAE uses these properties to set up `Condition`s:
 
 ```rust
