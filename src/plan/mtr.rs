@@ -17,7 +17,7 @@ impl Display for Mtr {
             .map(|&x| x.to_string())
             .collect::<Vec<_>>()
             .join(".");
-        write!(f, "{}", string)
+        write!(f, "{string}")
     }
 }
 

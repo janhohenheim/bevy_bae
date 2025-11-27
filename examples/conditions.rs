@@ -50,10 +50,8 @@ fn idle(_: In<OperatorInput>) -> OperatorStatus {
 fn update_state(press: On<Pointer<Press>>, mut props: Single<&mut Props, With<Plan>>) {
     match press.button {
         PointerButton::Primary => props.set("greet_mode", "on"),
-        PointerButton::Secondary => {
-            if props.get::<Ustr>("greet_mode") == "on" {
-                props.set("greet_mode", "ending");
-            }
+        PointerButton::Secondary if props["greet_mode"] == "on" => {
+            props.set("greet_mode", "ending");
         }
         _ => (),
     }

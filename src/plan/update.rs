@@ -2,7 +2,6 @@
 
 use bevy_ecs::error::{DefaultErrorHandler, HandleError as _};
 use bevy_ecs::system::command::run_system_cached_with;
-use bevy_mod_props::PropsExt;
 use core::marker::PhantomData;
 
 use crate::plan::PlannedOperator;

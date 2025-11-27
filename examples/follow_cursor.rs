@@ -82,9 +82,8 @@ fn update_close_to_cursor(
         .filter_map(|interaction| interaction.get_nearest_hit())
         .filter_map(|(_entity, hit)| hit.position)
     {
-        let was_close = *props.get::<bool>("close_to_cursor");
         let is_close = point.distance_squared(npc_transform.translation) < 10.0 * 10.0;
-        if was_close != is_close {
+        if props["close_to_cursor"] != is_close {
             props.set("close_to_cursor", is_close);
             commands.entity(npc).trigger(UpdatePlan::new);
         }

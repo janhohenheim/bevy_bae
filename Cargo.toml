@@ -22,7 +22,7 @@ bevy_ptr = { version = "0.17", default-features = false }
 bevy_utils = { version = "0.17", default-features = false }
 tracing = "0.1"
 
-bevy_mod_props = { version = "0.1", git = "https://github.com/NthTensor/trill" }
+bevy_mod_props = "1.0.0"
 
 ustr = { version = "1" }
 variadics_please = "1"
