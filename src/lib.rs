@@ -3,7 +3,7 @@
 /// Everything you need to get started with `bevy_bae`
 pub mod prelude {
     pub use crate::{
-        BaePlugin, BaeSystems,
+        BaePlugin, BaeSystems, Estr,
         condition::{
             Condition,
             relationship::{
@@ -38,6 +38,7 @@ pub mod prelude {
 }
 extern crate alloc;
 use bevy_ecs::{intern::Interned, schedule::ScheduleLabel};
+pub use estr::Estr;
 
 use crate::{
     plan::{
