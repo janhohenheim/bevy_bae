@@ -3,7 +3,6 @@
 use crate::prelude::*;
 use alloc::sync::Arc;
 use core::fmt::Debug;
-use ustr::Ustr;
 
 pub mod relationship;
 
@@ -50,7 +49,7 @@ impl Effect {
     }
 
     /// Shortcut for creating an effect that sets a property.
-    pub fn set(name: impl Into<Ustr>, value: impl Into<Value>) -> Self {
+    pub fn set(name: impl Into<Estr>, value: impl Into<Value>) -> Self {
         let name = name.into();
         let value = value.into();
         Self::new(move |props| props.set(name, value))
@@ -58,7 +57,7 @@ impl Effect {
 
     /// Shortcut for creating an effect that toggles a boolean property.
     /// If the property didn't exist before, it will be initialized to `true`.
-    pub fn toggle(name: impl Into<Ustr>) -> Self {
+    pub fn toggle(name: impl Into<Estr>) -> Self {
         let name = name.into();
 
         Self::new(move |props| {
@@ -69,14 +68,14 @@ impl Effect {
 
     /// Shortcut for creating an effect that increments a numeric property.
     /// If the property didn't exist before, it will be initialized to `value`.
-    pub fn inc<T: Into<Value>>(name: impl Into<Ustr>, value: impl Into<Value>) -> Self {
+    pub fn inc<T: Into<Value>>(name: impl Into<Estr>, value: impl Into<Value>) -> Self {
         Self::mutate(name, value, |a, b| *a += b)
     }
 
     /// Shortcut for creating an effect that increments a numeric property.
     /// If the property didn't exist before, it will be initialized to `-value`.
     pub fn dec<T: Into<Value> + Default>(
-        name: impl Into<Ustr>,
+        name: impl Into<Estr>,
         value: impl Into<Value> + Default,
     ) -> Self {
         Self::mutate(name, value, |a, b| *a -= b)
@@ -84,19 +83,19 @@ impl Effect {
 
     /// Shortcut for creating an effect that multiplies a numeric property.
     /// If the property didn't exist before, it will be initialized to `0`.
-    pub fn mul(name: impl Into<Ustr>, value: impl Into<Value> + Default) -> Self {
+    pub fn mul(name: impl Into<Estr>, value: impl Into<Value> + Default) -> Self {
         Self::mutate(name, value, |a, b| *a *= b)
     }
 
     /// Shortcut for creating an effect that divides a numeric property.
     /// If the property didn't exist before, it will be initialized to `0`.
-    pub fn div(name: impl Into<Ustr>, value: impl Into<Value> + Default) -> Self {
+    pub fn div(name: impl Into<Estr>, value: impl Into<Value> + Default) -> Self {
         Self::mutate(name, value, |a, b| *a /= b)
     }
 
     /// Shortcut for creating an effect that modifies a property based on a value.
     pub fn mutate(
-        name: impl Into<Ustr>,
+        name: impl Into<Estr>,
         value: impl Into<Value>,
         mutate: impl Fn(&mut Value, Value) + Send + Sync + 'static,
     ) -> Self {

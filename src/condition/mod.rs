@@ -4,8 +4,6 @@ use alloc::sync::Arc;
 use core::fmt::Debug;
 use core::ops::RangeBounds;
 
-use ustr::Ustr;
-
 use crate::prelude::*;
 
 pub mod relationship;
@@ -41,38 +39,38 @@ impl Condition {
     }
 
     /// Shorthand for creating a condition for the concept of `props[name] == value`
-    pub fn eq(name: impl Into<Ustr>, value: impl Into<Value>) -> Self {
+    pub fn eq(name: impl Into<Estr>, value: impl Into<Value>) -> Self {
         Self::cmp(name, value, |a, b| a == b)
     }
 
     /// Shorthand for creating a condition for the concept of `props[name] != value`
-    pub fn ne(name: impl Into<Ustr>, value: impl Into<Value>) -> Self {
+    pub fn ne(name: impl Into<Estr>, value: impl Into<Value>) -> Self {
         Self::cmp(name, value, |a, b| a != b)
     }
 
     /// Shorthand for creating a condition for the concept of `props[name] > value`
-    pub fn gt(name: impl Into<Ustr>, value: impl Into<Value>) -> Self {
+    pub fn gt(name: impl Into<Estr>, value: impl Into<Value>) -> Self {
         Self::cmp(name, value, |a, b| a > b)
     }
 
     /// Shorthand for creating a condition for the concept of `props[name] >= value`
-    pub fn ge(name: impl Into<Ustr>, value: impl Into<Value>) -> Self {
+    pub fn ge(name: impl Into<Estr>, value: impl Into<Value>) -> Self {
         Self::cmp(name, value, |a, b| a >= b)
     }
 
     /// Shorthand for creating a condition for the concept of `props[name] < value`
-    pub fn lt(name: impl Into<Ustr>, value: impl Into<Value>) -> Self {
+    pub fn lt(name: impl Into<Estr>, value: impl Into<Value>) -> Self {
         Self::cmp(name, value, |a, b| a < b)
     }
 
     /// Shorthand for creating a condition for the concept of `props[name] <= value`
-    pub fn le(name: impl Into<Ustr>, value: impl Into<Value>) -> Self {
+    pub fn le(name: impl Into<Estr>, value: impl Into<Value>) -> Self {
         Self::cmp(name, value, |a, b| a <= b)
     }
 
     /// Shorthand for creating a condition for the concept of `range.contains(props[name])`
     pub fn in_range(
-        name: impl Into<Ustr>,
+        name: impl Into<Estr>,
         range: impl RangeBounds<f32> + Send + Sync + 'static,
     ) -> Self {
         let name = name.into();
@@ -91,7 +89,7 @@ impl Condition {
 
     /// Shortcut for creating a condition that compares a property with a value.
     pub fn cmp(
-        name: impl Into<Ustr>,
+        name: impl Into<Estr>,
         value: impl Into<Value>,
         predicate: impl Fn(Value, Value) -> bool + Send + Sync + 'static,
     ) -> Self {
