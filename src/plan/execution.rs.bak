@@ -1,16 +1,3 @@
-use crate::{plan::PlannedOperator, prelude::*};
-
-pub(crate) fn update_empty_plans(
-    mut plans: Query<(Entity, NameOrEntity, &Plan)>,
-    mut commands: Commands,
-) {
-    for (entity, name, plan) in plans.iter_mut() {
-        if plan.is_empty() {
-            commands.entity(entity).trigger(UpdatePlan::new);
-            debug!(entity=?name.entity, name=?name.name, "Plan is empty, triggering replan.");
-        }
-    }
-}
 pub(crate) fn execute_plan(
     world: &mut World,
     mut plans: Local<QueryState<(NameOrEntity, &mut Plan)>>,
