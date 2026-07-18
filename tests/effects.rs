@@ -1,7 +1,7 @@
 //! Tests the application of effects
 
 use bevy::{log::LogPlugin, prelude::*, time::TimeUpdateStrategy};
-use bevy_bae::{plan::Plan, prelude::*};
+use bevy_bae::{plan::{Plan, PlanDomain}, prelude::*};
 use std::sync::Mutex;
 
 #[test]
@@ -145,6 +145,7 @@ fn assert_effects(behavior: impl Bundle, props: Vec<Vec<(&'static str, Value)>>)
         commands
             .spawn(behavior.lock().unwrap().take().unwrap())
             .insert_if_new(Name::new("root"))
+            .insert_if_new(PlanDomain::default())
             .trigger(UpdatePlan::new);
     });
     app.finish();

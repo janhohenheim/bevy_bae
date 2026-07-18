@@ -1,7 +1,7 @@
 //! Tests the plan execution
 
 use bevy::{log::LogPlugin, prelude::*, time::TimeUpdateStrategy};
-use bevy_bae::prelude::*;
+use bevy_bae::{plan::PlanDomain, prelude::*};
 use bevy_ecs::entity_disabling::Disabled;
 use std::sync::Mutex;
 
@@ -412,6 +412,7 @@ impl TestApp for App {
             commands
                 .spawn(behavior.lock().unwrap().take().unwrap())
                 .insert_if_new(Name::new("root"))
+                .insert_if_new(PlanDomain::default())
                 .trigger(UpdatePlan::new);
         })
         .add_systems(PreUpdate, |mut last_opt: ResMut<LastOpt>| {
