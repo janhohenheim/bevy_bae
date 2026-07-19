@@ -174,13 +174,13 @@ fn update_plan_inner(
     plan.operators_total = op_entities;
 
     let old_plan = world
-        .entity(root)
+        .entity(executor)
         .get::<Plan>()
         .cloned()
         .unwrap_or_default();
-    world.entity_mut(root).insert(plan);
+    world.entity_mut(executor).insert(plan);
     world.trigger(ReplacePlan {
-        entity: root,
+        entity: executor,
         old: old_plan,
         _pd: PhantomData,
     });
