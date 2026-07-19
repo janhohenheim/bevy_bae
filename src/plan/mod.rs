@@ -1,7 +1,7 @@
 //! Contains the [`Plan`] component and types for operating on it.
 
 use alloc::collections::VecDeque;
-use bevy_ecs::{entity_disabling::Disabled, query::QueryEntityError};
+use bevy_ecs::{entity_disabling::Disabled, lifecycle::HookContext, query::QueryEntityError, world::DeferredWorld};
 
 use crate::{plan::mtr::Mtr, prelude::*};
 
@@ -9,11 +9,29 @@ pub(crate) mod execution;
 pub mod mtr;
 pub mod update;
 
+/// Specifies the domain used by a planner entity.
+#[derive(Component, Default)]
+#[component(on_insert = Self::on_insert_hook)]
+pub enum PlanDomain {
+    /// The planner entity defines its own task hierarchy.
+    #[default]
+    This,
+    /// The planner entity reuses a task hierarchy defined by another entity.
+    Entity(Entity),
+}
+
+impl PlanDomain {
+    fn on_insert_hook(mut world: DeferredWorld, context: HookContext) {
+        let mut cmds = world.commands();
+        cmds.entity(context.entity).insert_if_new(Plan::default());
+    }
+}
+
 /// A full plan of operators to execute. If this is empty, either through manually clearing it, inserting it, when it runs out of operators, or fails to execute them,
 /// the plan will be recomputed in the next fixed frame.
 #[derive(Component, Clone, Default, PartialEq, Eq, Reflect, Debug, Deref, DerefMut)]
 #[reflect(Component)]
-#[require(Props)]
+#[require(Props, PlanDomain)]
 pub struct Plan {
     /// The queue of planned [`Operator`]s to execute. This will get [`VecDeque::pop_front`]ed during plan execution.
     #[reflect(ignore)]

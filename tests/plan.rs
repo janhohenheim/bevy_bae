@@ -1,7 +1,7 @@
 //! Tests the plan generation
 
 use bevy::{log::LogPlugin, prelude::*, time::TimeUpdateStrategy};
-use bevy_bae::{plan::Plan, prelude::*};
+use bevy_bae::{plan::{Plan, PlanDomain}, prelude::*};
 use std::sync::Mutex;
 
 #[test]
@@ -233,6 +233,7 @@ fn assert_plan(behavior: impl Bundle, plan: Vec<&'static str>) {
         commands
             .spawn(behavior.lock().unwrap().take().unwrap())
             .insert_if_new(Name::new("root"))
+            .insert_if_new(PlanDomain::default())
             .trigger(UpdatePlan::new);
     });
     app.finish();

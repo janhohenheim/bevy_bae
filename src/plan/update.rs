@@ -4,7 +4,7 @@ use bevy_ecs::error::{DefaultErrorHandler, HandleError as _};
 use bevy_ecs::system::command::run_system_cached_with;
 use core::marker::PhantomData;
 
-use crate::plan::PlannedOperator;
+use crate::plan::{PlanDomain, PlannedOperator};
 use crate::plan::mtr::Mtr;
 use crate::prelude::*;
 use crate::task::compound::{DecomposeInput, DecomposeResult, TypeErasedCompoundTask};
@@ -62,6 +62,7 @@ pub(crate) fn update_plan(
 fn update_plan_inner(
     update: In<UpdatePlan>,
     world: &mut World,
+    mut plans: Local<QueryState<&PlanDomain>>,
     mut conditions: Local<QueryState<(Entity, &Condition)>>,
     mut effects: Local<QueryState<Entity, With<Effect>>>,
     mut tasks: Local<
@@ -71,7 +72,13 @@ fn update_plan_inner(
         >,
     >,
 ) -> Result {
-    let root = update.entity;
+    let executor = update.entity;
+    let Ok(domain) = plans.get(world, executor)
+    else { return Err(BevyError::from("Called `update_plan` on entity without Plan.")) };
+    let root = match domain {
+        PlanDomain::This => executor,
+        PlanDomain::Entity(entity) => *entity,
+    };
 
     let mut world_state = world.entity(update.entity).props().clone();
     let mut initial_conditions = Vec::new();
@@ -167,13 +174,13 @@ fn update_plan_inner(
     plan.operators_total = op_entities;
 
     let old_plan = world
-        .entity(root)
+        .entity(executor)
         .get::<Plan>()
         .cloned()
         .unwrap_or_default();
-    world.entity_mut(root).insert(plan);
+    world.entity_mut(executor).insert(plan);
     world.trigger(ReplacePlan {
-        entity: root,
+        entity: executor,
         old: old_plan,
         _pd: PhantomData,
     });
