@@ -1,6 +1,6 @@
 //! Contains the [`UpdatePlan`] [`EntityEvent`].
 
-use bevy_ecs::error::{DefaultErrorHandler, HandleError as _};
+use bevy_ecs::error::FallbackErrorHandler;
 use bevy_ecs::system::command::run_system_cached_with;
 use core::marker::PhantomData;
 
@@ -49,13 +49,13 @@ pub struct ReplacePlan {
 pub(crate) fn update_plan(
     update: On<UpdatePlan>,
     mut commands: Commands,
-    error_handler: Option<Res<DefaultErrorHandler>>,
+    error_handler: Option<Res<FallbackErrorHandler>>,
 ) {
     let entity = update.entity;
     let error_handler = error_handler.map(|h| *h).unwrap_or_default();
-    commands.queue(
-        run_system_cached_with(update_plan_inner, UpdatePlan { entity })
-            .handle_error_with(error_handler.0),
+    commands.queue_handled(
+        run_system_cached_with(update_plan_inner, UpdatePlan { entity }),
+        error_handler.0,
     );
 }
 
