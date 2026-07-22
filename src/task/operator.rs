@@ -14,7 +14,7 @@ pub type OperatorId = SystemId<In<OperatorInput>, OperatorStatus>;
 /// The smallest unit of a plan, representing a single step. Contains a system that gets called for you during the execution of the plan.
 #[derive(Component, Reflect)]
 #[reflect(Component)]
-#[component(on_insert = Self::on_insert_hook, on_replace = Self::on_replace_hook)]
+#[component(on_insert = Self::on_insert_hook, on_discard = Self::on_discard_hook)]
 #[require(BaeTaskPresent)]
 pub struct Operator {
     #[reflect(ignore)]
@@ -83,7 +83,7 @@ impl Operator {
         world.get_mut::<Self>(context.entity).unwrap().system_id = Some(system_id);
     }
 
-    fn on_replace_hook(mut world: DeferredWorld, context: HookContext) {
+    fn on_discard_hook(mut world: DeferredWorld, context: HookContext) {
         let Some(system_id) = world
             .get::<Self>(context.entity)
             .and_then(|tt| tt.system_id)
